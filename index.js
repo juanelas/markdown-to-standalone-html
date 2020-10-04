@@ -1,6 +1,7 @@
 'use strict'
 
 const fs = require('fs')
+const path = require('path')
 const MarkdownIt = require('markdown-it')
 const mdKatex = require('@traptitech/markdown-it-katex')
 const mdAnchor = require('markdown-it-anchor')
@@ -70,9 +71,9 @@ md.use(urlimgToBase64)
 md.use(mdAnchor, { level: 2, slugify: uslug })
 
 const defaultTemplate = 'template.html'
-const cssBootstrap = fs.readFileSync('./node_modules/bootstrap/dist/css/bootstrap.css', 'utf8')
-const cssHighlightJs = fs.readFileSync('./node_modules/highlight.js/styles/vs2015.css', 'utf8')
-const cssKatex = fs.readFileSync('./node_modules/katex/dist/katex.css', 'utf8')
+const cssBootstrap = fs.readFileSync(path.join(__dirname, '/node_modules/bootstrap/dist/css/bootstrap.css'), 'utf8')
+const cssHighlightJs = fs.readFileSync(path.join(__dirname, '/node_modules/highlight.js/styles/vs2015.css'), 'utf8')
+const cssKatex = fs.readFileSync(path.join(__dirname, '/node_modules/katex/dist/katex.css'), 'utf8')
 
 const markdownToStandAloneHtml = (mdContents, customTemplate) => {
   const toc = md.render(mdToc(mdContents, { firsth1: false, slugify: uslug }).content)
