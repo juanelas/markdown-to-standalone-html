@@ -17,6 +17,7 @@
     "email": "j.hernandez@upc.edu",
     "url": "https://github.com/juanelas"
   },
+  "repository": "github:juanelas/markdown-to-standalone-html",
   "license": "MIT",
   "preferGlobal": true,
   "bin": {
@@ -33,5 +34,8 @@
     "markdown-it-anchor": "^6.0.0",
     "markdown-toc": "^1.2.0",
     "uslug": "^1.0.4"
+  },
+  "devDependencies": {
+    "standard": "^14.3.4"
   }
 }
