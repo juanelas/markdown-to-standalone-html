@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>{{TITLE}}</title>
+  <style type="text/css">
+    code {
+      white-space: pre-wrap;
+      font-style: normal;
+      border-radius: 4px;
+      max-height: 500px;
+    }
+
+    .katex {
+      font-size: initial !important;
+    }
+
+    .sidebar {
+      position: -webkit-sticky;
+      /* Safari */
+      position: sticky;
+      top: 0;
+      margin-bottom: 20px;
+    }
+
+    .sidebar ul {
+      padding-left: 10px;
+    }
+
+    .sidebar li {
+      list-style-type: none;
+    }
+
+    .sidebar a {
+      color: #333;
+    }
+
+    .sidebar a .feather {
+      margin-right: 4px;
+      color: #999;
+    }
+
+    .sidebar a:active {
+      color: #007bff;
+    }
+
+    .sidebar a:hover .feather,
+    .sidebar a:active .feather {
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    blockquote {
+      background-color: #fffbe8;
+      border-left: 4px solid gray;
+      padding-left: 20px;
+      font-style: italic;
+    }
+  </style>
+  <style type="text/css">
+    {{CSS}}
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <nav class="sidebar">
+          <h4>Table of Contents</h4>
+          {{TOC}}
+        </nav>
+      </div>
+      <div class="col-lg-8 main">
+        {{MAIN}}
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
