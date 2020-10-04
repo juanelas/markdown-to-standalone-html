@@ -20,9 +20,7 @@
   "repository": "github:juanelas/markdown-to-standalone-html",
   "license": "MIT",
   "preferGlobal": true,
-  "bin": {
-    "markdown-to-standalone-html": "./bin/markdown-to-standalone-html.js"
-  },
+  "bin": "./bin/markdown-to-standalone-html.js",
   "dependencies": {
     "@traptitech/markdown-it-katex": "^3.3.0",
     "bootstrap": "^4.5.2",
