@@ -83,7 +83,7 @@ const markdownToStandAloneHtml = (mdContents, customTemplate) => {
   const regex = /<h1>([^<>]*)<\/h1>/
   const title = main.match(regex) ? main.match(regex)[1] : 'Readme'
 
-  const template = fs.readFileSync(customTemplate || defaultTemplate, 'utf8')
+  const template = fs.readFileSync(path.join(__dirname, customTemplate || defaultTemplate), 'utf8')
 
   let output = template.replace('{{CSS}}', cssBootstrap + cssHighlightJs + cssKatex)
     .replace('{{TOC}}', toc)
