@@ -1,5 +1,7 @@
 # markdown-to-standalone-html
 
+Markdown to standalone HTML converter. It generates a standalone HTML with all CSS and images embedded. A browsable TOC is automatically generated, a Bootstrap 4 layout is used to create a simple but responsive page display, math syntax is supported through (KATEX), and code syntax highlighting through highlight.js.
+
 ```text
 Usage: markdown-to-standalone-html [options] <inputfile>
 
