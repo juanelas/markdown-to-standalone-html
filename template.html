@@ -4,13 +4,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>{{TITLE}}</title>
+  <title><!-- {{TITLE}} --></title>
   <style type="text/css">
     code {
       white-space: pre-wrap;
       font-style: normal;
       border-radius: 4px;
       max-height: 500px;
+      box-shadow: inset 0px 0px 2px rgba(0, 0, 0, .3);
     }
 
     figure img {
@@ -68,9 +69,7 @@
       font-style: italic;
     }
   </style>
-  <style type="text/css">
-    {{CSS}}
-  </style>
+  <!-- {{CSS}} -->
 </head>
 
 <body>
@@ -79,14 +78,15 @@
       <div class="col-lg-4">
         <nav class="sidebar">
           <h4>Table of Contents</h4>
-          {{TOC}}
+          <!-- {{TOC}} -->
         </nav>
       </div>
       <div class="col-lg-8 main">
-        {{MAIN}}
+        <!-- {{MAIN}} -->
       </div>
     </div>
   </div>
+  <!-- {{SCRIPT}} -->
 </body>
 
 </html>

@@ -29,10 +29,12 @@
     "html-minifier": "^4.0.0",
     "image-type": "^4.1.0",
     "is-svg": "^4.2.1",
+    "jquery": "^3.5.1",
     "markdown-it": "^11.0.1",
     "markdown-it-anchor": "^6.0.0",
     "markdown-it-implicit-figures": "^0.10.0",
     "markdown-toc": "^1.2.0",
+    "popper.js": "^1.16.1",
     "uslug": "^1.0.4"
   },
   "devDependencies": {
