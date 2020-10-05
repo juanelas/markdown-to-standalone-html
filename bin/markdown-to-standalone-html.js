@@ -2,6 +2,7 @@
 'use strict'
 
 const fs = require('fs')
+const path = require('path')
 
 const markdownToStandAloneHtml = require('../index')
 
@@ -23,6 +24,6 @@ if (!outputFile) {
 
 const mdContents = fs.readFileSync(inputFile, 'utf8')
 
-const htmlContents = markdownToStandAloneHtml(mdContents, program.template)
+const htmlContents = markdownToStandAloneHtml(mdContents, path.dirname(inputFile), program.template)
 
 fs.writeFileSync(outputFile, htmlContents)
