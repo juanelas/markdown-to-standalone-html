@@ -3,17 +3,16 @@
 const fs = require('fs')
 const path = require('path')
 const MarkdownIt = require('markdown-it')
-const mdAnchor = require('markdown-it-anchor')
 const mdFigure = require('markdown-it-implicit-figures')
-const mdToc = require('markdown-toc')
-const imageType = require('image-type')
-const isSvg = require('is-svg')
 const minify = require('html-minifier').minify
-const uslug = require('uslug')
 
-const markdownToStandAloneHtml = (mdContents, { basePath = '.', template = 'template.html', bootstrapCss = true, bootstrapJs = false, highlightjs = true, highlightjsStyle = 'vs2015', katex = true, tocMaxDepth = 6 }) => {
+async function markdownToStandAloneHtml (mdContents, {
+  basePath = '.',
+  template = './templates/template.html',
+  plugins = []
+}) {
   const mdItOptions = {
-    html: false, // Enable HTML tags in source
+    html: true, // Enable HTML tags in source
     xhtmlOut: false, // Use '/' to close single tags (<br />).
     // This is only for full CommonMark compatibility.
     breaks: false, // Convert '\n' in paragraphs into <br>
@@ -33,12 +32,14 @@ const markdownToStandAloneHtml = (mdContents, { basePath = '.', template = 'temp
   }
   const cssArr = []
   const scriptArr = []
-  if (highlightjs) {
+
+  let plugin = plugins.find(plugin => plugin.name === 'highlightjs')
+  if (plugin) {
     // Highlighter function. Should return escaped HTML,
     // or '' if the source string is not changed and should be escaped externaly.
     // If result starts with <pre... internal wrapper is skipped.
-    const hljs = require('highlight.js')
     mdItOptions.highlight = function (str, lang) {
+      const hljs = require('highlight.js')
       if (lang && hljs.getLanguage(lang)) {
         try {
           return '<pre><code class="hljs">' +
@@ -49,8 +50,9 @@ const markdownToStandAloneHtml = (mdContents, { basePath = '.', template = 'temp
 
       return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>'
     }
-    cssArr.push(fs.readFileSync(path.join(__dirname, `/node_modules/highlight.js/styles/${highlightjsStyle}.css`), 'utf8'))
+    cssArr.push(fs.readFileSync(path.join(__dirname, `/node_modules/highlight.js/styles/${plugin.options.theme}.css`), 'utf8'))
   }
+
   const md = MarkdownIt(mdItOptions)
 
   md.use(mdFigure, {
@@ -60,28 +62,25 @@ const markdownToStandAloneHtml = (mdContents, { basePath = '.', template = 'temp
     link: false // <a href="img.png"><img src="img.png"></a>, default: false
   })
 
-  md.use(mdAnchor, { level: 2, slugify: uslug })
+  let templateStr = fs.readFileSync(path.join(__dirname, template), 'utf8')
 
-  function urlimgToBase64 (md) {
-    md.core.ruler.push('urlimg-to-base64', state => {
-      state.tokens.filter(token => token.type === 'inline').forEach(token => {
-        token.children.filter(token => token.type === 'image').forEach(token => {
-          const src = token.attrGet('src') || ''
-          let imgBuf = null
-          try {
-            imgBuf = fs.readlinkSync(URL(src))
-          } catch (error) {
-            imgBuf = fs.readFileSync(path.resolve(basePath, src))
-          }
-          const imgMimeType = isSvg(imgBuf) ? 'image/svg+xml' : imageType(imgBuf).mime
-          token.attrSet('src', `data:${imgMimeType};base64,${imgBuf.toString('base64')}`)
-        })
-      })
-    })
+  plugin = plugins.find(plugin => plugin.name === 'toc')
+  if (plugin) {
+    templateStr = fs.readFileSync(path.join(__dirname, path.dirname(template), `${path.basename(template, '.html')}.toc.html`), 'utf8')
+    const mdAnchor = require('markdown-it-anchor')
+    const uslug = require('uslug')
+
+    md.use(mdAnchor, { level: 2, slugify: uslug })
+    const mdToc = require('markdown-toc')
+    const tocContents = md.render(mdToc(mdContents, { firsth1: false, slugify: uslug, maxdepth: plugin.options.tocMaxDepth }).content)
+    templateStr = templateStr.replace('<!-- {{TOC_TITLE}} -->', plugin.options.tocTitle)
+      .replace('<!-- {{TOC}} -->', tocContents)
   }
-  md.use(urlimgToBase64)
 
-  if (katex) {
+  md.use(require('./plugins/markdown-it-embedded-images'), basePath)
+
+  plugin = plugins.find(plugin => plugin.name === 'katex')
+  if (plugin) {
     const mdKatex = require('@traptitech/markdown-it-katex')
     md.use(mdKatex, { throwOnError: true })
 
@@ -94,36 +93,39 @@ const markdownToStandAloneHtml = (mdContents, { basePath = '.', template = 'temp
     cssArr.push(cssContents)
   }
 
-  if (bootstrapCss) {
-    cssArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/bootstrap/dist/css/bootstrap.css'), 'utf8'))
-
-    if (bootstrapJs) {
-      scriptArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/jquery/dist/jquery.slim.min.js'), 'utf8'))
-      scriptArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/popper.js/dist/popper.min.js'), 'utf8'))
-      scriptArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/bootstrap/dist/js/bootstrap.min.js'), 'utf8'))
-    }
+  plugin = plugins.find(plugin => plugin.name === 'code-chords')
+  if (plugin) {
+    md.use(require('./plugins/markdown-it-code-chords'))
+    cssArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/markdown-it-chords/markdown-it-chords.css'), 'utf-8'))
   }
 
-  const toc = md.render(mdToc(mdContents, { firsth1: false, slugify: uslug, maxdepth: tocMaxDepth }).content)
+  plugin = plugins.find(plugin => plugin.name === 'bootstrapCss')
+  if (plugin) {
+    cssArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/bootstrap/dist/css/bootstrap.css'), 'utf8'))
+  }
+
+  plugin = plugins.find(plugin => plugin.name === 'bootstrapJs')
+  if (plugin) {
+    const removeMapRegEx = /\/{2}# sourceMappingURL=\S*/g
+    scriptArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/jquery/dist/jquery.slim.min.js'), 'utf8').replace(removeMapRegEx, ''))
+    scriptArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'), 'utf8').replace(removeMapRegEx, ''))
+  }
 
   const main = md.render(mdContents)
 
-  const titleRegex = /<h1>([^<>]*)<\/h1>/
-  const title = main.match(titleRegex) ? main.match(titleRegex)[1] : 'Readme'
-
-  const templateStr = fs.readFileSync(path.join(__dirname, template), 'utf8')
+  const titleRegex = /<h1>(.+?)<\/h1>/sg
+  const title = main.matchAll(titleRegex) ? main.match(titleRegex)[1] : 'Readme'
 
   const css = `<style type="text/css">${cssArr.join('\n')}</style>`
 
-  const script = `<script>${scriptArr.join('\n')}</script>`
+  const script = `<script>\n${scriptArr.join('\n</script>\n<script>\n')}\n</script>`
 
-  let output = templateStr.replace('<!-- {{CSS}} -->', css)
-    .replace('<!-- {{TOC}} -->', toc)
+  templateStr = templateStr.replace('<!-- {{CSS}} -->', css)
     .replace('<!-- {{MAIN}} -->', main)
     .replace('<!-- {{TITLE}} -->', title)
     .replace('<!-- {{SCRIPT}} -->', script)
 
-  output = minify(output, {
+  const output = minify(templateStr, {
     minifyCSS: true
   })
 
