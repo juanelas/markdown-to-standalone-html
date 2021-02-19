@@ -45,17 +45,19 @@ if (!outputFile) {
 
 const mdContents = fs.readFileSync(inputFile, 'utf8')
 
+const programOptions = program.opts()
+
 const plugins = []
-if (program.enableAll || (!program.disableAll && !program.disableHighlightjs)) plugins.push({ name: 'highlightjs', options: { theme: program.highlightjsStyle } })
-if (program.enableAll || (!program.disableAll && !program.disableBootstrap)) plugins.push({ name: 'bootstrapCss' })
-if (program.enableAll || (!program.disableAll && program.enableBootstrapJs)) plugins.push({ name: 'bootstrapJs' })
-if (program.enableAll || (!program.disableAll && !program.disableKatex)) plugins.push({ name: 'katex' })
-if (!program.disableAll && program.tocMaxDepth > 0) plugins.push({ name: 'toc', options: { tocMaxDepth: program.tocMaxDepth, tocTitle: program.tocTitle } })
-if (program.enableAll || (!program.disableAll && program.chords)) plugins.push({ name: 'code-chords' })
+if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableHighlightjs)) plugins.push({ name: 'highlightjs', options: { theme: programOptions.highlightjsStyle } })
+if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableBootstrap)) plugins.push({ name: 'bootstrapCss' })
+if (programOptions.enableAll || (!programOptions.disableAll && programOptions.enableBootstrapJs)) plugins.push({ name: 'bootstrapJs' })
+if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableKatex)) plugins.push({ name: 'katex' })
+if (!programOptions.disableAll && programOptions.tocMaxDepth > 0) plugins.push({ name: 'toc', options: { tocMaxDepth: programOptions.tocMaxDepth, tocTitle: programOptions.tocTitle } })
+if (programOptions.enableAll || (!programOptions.disableAll && programOptions.chords)) plugins.push({ name: 'code-chords' })
 
 const options = {
   basePath: path.dirname(inputFile),
-  template: program.template,
+  template: programOptions.template,
   plugins
 }
 
