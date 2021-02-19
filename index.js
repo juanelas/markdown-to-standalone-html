@@ -113,8 +113,8 @@ async function markdownToStandAloneHtml (mdContents, {
 
   const main = md.render(mdContents)
 
-  const titleRegex = /<h1>(.+?)<\/h1>/sg
-  const title = main.matchAll(titleRegex) ? main.match(titleRegex)[1] : 'Readme'
+  const titleRegex = /<h1>(.+?)<\/h1>/s
+  const title = main.match(titleRegex) ? main.match(titleRegex)[1] : 'Readme'
 
   const css = `<style type="text/css">${cssArr.join('\n')}</style>`
 
