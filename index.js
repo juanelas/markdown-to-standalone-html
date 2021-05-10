@@ -50,7 +50,7 @@ async function markdownToStandAloneHtml (mdContents, {
 
       return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>'
     }
-    cssArr.push(fs.readFileSync(path.join(__dirname, `/node_modules/highlight.js/styles/${plugin.options.theme}.css`), 'utf8'))
+    cssArr.push(fs.readFileSync(require.resolve(`highlight.js/styles/${plugin.options.theme}.css`), 'utf8'))
   }
 
   const md = MarkdownIt(mdItOptions)
@@ -86,7 +86,7 @@ async function markdownToStandAloneHtml (mdContents, {
 
     // Let us embed custom KaTeX fonts in the CSS
     const cssRegex = /url\((.+?)\) format\(['"](.+?)['"]\)/g
-    const cssContents = fs.readFileSync(path.join(__dirname, '/node_modules/katex/dist/katex.css'), 'utf8').replace(cssRegex, (match, p1, p2) => {
+    const cssContents = fs.readFileSync(require.resolve('katex/dist/katex.css'), 'utf8').replace(cssRegex, (match, p1, p2) => {
       const fontFileBuf = fs.readFileSync(path.join(__dirname, '/node_modules/katex/dist', p1))
       return `url(data:font/${p2};base64,${fontFileBuf.toString('base64')})`
     })
@@ -96,19 +96,19 @@ async function markdownToStandAloneHtml (mdContents, {
   plugin = plugins.find(plugin => plugin.name === 'code-chords')
   if (plugin) {
     md.use(require('./plugins/markdown-it-code-chords'))
-    cssArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/markdown-it-chords/markdown-it-chords.css'), 'utf-8'))
+    cssArr.push(fs.readFileSync(require.resolve('markdown-it-chords/markdown-it-chords.css'), 'utf-8'))
   }
 
   plugin = plugins.find(plugin => plugin.name === 'bootstrapCss')
   if (plugin) {
-    cssArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/bootstrap/dist/css/bootstrap.css'), 'utf8'))
+    cssArr.push(fs.readFileSync(require.resolve('bootstrap/dist/css/bootstrap.css'), 'utf8'))
   }
 
   plugin = plugins.find(plugin => plugin.name === 'bootstrapJs')
   if (plugin) {
     const removeMapRegEx = /\/{2}# sourceMappingURL=\S*/g
-    scriptArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/jquery/dist/jquery.slim.min.js'), 'utf8').replace(removeMapRegEx, ''))
-    scriptArr.push(fs.readFileSync(path.join(__dirname, '/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'), 'utf8').replace(removeMapRegEx, ''))
+    scriptArr.push(fs.readFileSync(require.resolve('jquery/dist/jquery.slim.min.js'), 'utf8').replace(removeMapRegEx, ''))
+    scriptArr.push(fs.readFileSync(require.resolve('bootstrap/dist/js/bootstrap.bundle.min.js'), 'utf8').replace(removeMapRegEx, ''))
   }
 
   const main = md.render(mdContents)
