@@ -38,12 +38,12 @@ async function markdownToStandAloneHtml (mdContents, {
     // Highlighter function. Should return escaped HTML,
     // or '' if the source string is not changed and should be escaped externaly.
     // If result starts with <pre... internal wrapper is skipped.
-    mdItOptions.highlight = function (str, lang) {
+    mdItOptions.highlight = function (str, language) {
       const hljs = require('highlight.js')
-      if (lang && hljs.getLanguage(lang)) {
+      if (language && hljs.getLanguage(language)) {
         try {
           return '<pre><code class="hljs">' +
-            hljs.highlight(lang, str, true).value +
+            hljs.highlight(str, { language, ignoreIllegals: true }).value +
             '</code></pre>'
         } catch (__) { }
       }
@@ -87,7 +87,7 @@ async function markdownToStandAloneHtml (mdContents, {
     // Let us embed custom KaTeX fonts in the CSS
     const cssRegex = /url\((.+?)\) format\(['"](.+?)['"]\)/g
     const cssContents = fs.readFileSync(require.resolve('katex/dist/katex.css'), 'utf8').replace(cssRegex, (match, p1, p2) => {
-      const fontFileBuf = fs.readFileSync(path.join(__dirname, '/node_modules/katex/dist', p1))
+      const fontFileBuf = fs.readFileSync(require.resolve('katex', 'dist', p1))
       return `url(data:font/${p2};base64,${fontFileBuf.toString('base64')})`
     })
     cssArr.push(cssContents)
