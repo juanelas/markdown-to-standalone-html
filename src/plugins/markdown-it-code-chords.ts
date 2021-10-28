@@ -1,9 +1,11 @@
-'use strict'
+import MarkdownIt from 'markdown-it'
+import mdItChords from 'markdown-it-chords'
+import { RenderRule } from 'markdown-it/lib/renderer'
 
-const mdChords = require('markdown-it')({ breaks: true }).use(require('markdown-it-chords'))
+const mdChords = MarkdownIt({ breaks: true }).use(mdItChords)
 
-module.exports = function codeChords (md) {
-  const defaultRender = md.renderer.rules.fence
+export default function codeChords (md: MarkdownIt): void {
+  const defaultRender = md.renderer.rules.fence as RenderRule
 
   md.renderer.rules.fence = function (tokens, idx, options, env, self) {
     const token = tokens[idx]

@@ -1,13 +1,14 @@
 #!/usr/bin/env node
-'use strict'
 
-const fs = require('fs')
-const path = require('path')
-const pkgJson = require('../package.json')
+import fs from 'fs'
+import path from 'path'
+// import pkgJson from '../package.json'
 
-const markdownToStandAloneHtml = require('../index')
+import markdownToStandAloneHtml, { Plugin } from './index'
 
-const { program } = require('commander')
+import { program } from 'commander'
+
+const pkgJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'))
 
 program.version(pkgJson.version, '-v, --version', 'output the current version')
 
@@ -29,31 +30,33 @@ program.option('-K, --disable-katex', 'disable math support (prevents embedding 
 program.option('-o, --output <outputfile>', 'set the output file name. If omitted the output filename is the input one with the extension switched to .html')
 program.option('-t, --template <template>', 'force using a user-provided template instead of the default one. Generate two files yourtemplate.html and yourtemplate.toc.html. Take a look to template.html (no toc version) and template.toc.html (TOC version) for inspiration.')
 
-program.option('-d, --toc-max-depth <depth>', 'the TOC will only use headings whose depth is at most maxdepth. A value of 0 disables the TOC', 3)
+program.option('-d, --toc-max-depth <depth>', 'the TOC will only use headings whose depth is at most maxdepth. A value of 0 disables the TOC', '3')
 program.option('--toc-title <title>', 'the title used for the TOC', 'Table of contents')
 
 program.parse(process.argv)
 
-const inputFile = program.args[0]
-if (!inputFile) program.help()
-
-let outputFile = program.output
-if (!outputFile) {
-  const pos = inputFile.lastIndexOf('.')
-  outputFile = inputFile.substr(0, pos < 0 ? inputFile.length : pos) + '.html'
-}
+const inputFile: string = program.args[0]
+if (inputFile === '') program.help()
 
 const mdContents = fs.readFileSync(inputFile, 'utf8')
 
 const programOptions = program.opts()
+let outputFile: string = programOptions.output
+if (outputFile === undefined) {
+  const pos = inputFile.lastIndexOf('.')
+  outputFile = inputFile.substr(0, pos < 0 ? inputFile.length : pos) + '.html'
+}
 
-const plugins = []
+const plugins: Plugin[] = []
+
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableHighlightjs)) plugins.push({ name: 'highlightjs', options: { theme: programOptions.highlightjsStyle } })
 if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableBootstrap)) plugins.push({ name: 'bootstrapCss' })
 if (programOptions.enableAll || (!programOptions.disableAll && programOptions.enableBootstrapJs)) plugins.push({ name: 'bootstrapJs' })
 if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableKatex)) plugins.push({ name: 'katex' })
-if (!programOptions.disableAll && programOptions.tocMaxDepth > 0) plugins.push({ name: 'toc', options: { tocMaxDepth: programOptions.tocMaxDepth, tocTitle: programOptions.tocTitle } })
+if (!programOptions.disableAll && programOptions.tocMaxDepth > 0) plugins.push({ name: 'toc', options: { tocMaxDepth: Number(programOptions.tocMaxDepth), tocTitle: programOptions.tocTitle } })
 if (programOptions.enableAll || (!programOptions.disableAll && programOptions.chords)) plugins.push({ name: 'code-chords' })
+/* eslint-enable @typescript-eslint/strict-boolean-expressions */
 
 const options = {
   basePath: path.dirname(inputFile),
@@ -63,7 +66,7 @@ const options = {
 
 markdownToStandAloneHtml(mdContents, options).then((htmlContents) => {
   fs.writeFile(outputFile, htmlContents, 'utf8', (err) => {
-    if (err) throw err
+    if (err != null) throw err
     console.log('Output saved to ' + outputFile)
   })
 }).catch((error) => {

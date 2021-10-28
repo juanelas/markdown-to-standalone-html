@@ -20,25 +20,45 @@
   "repository": "github:juanelas/markdown-to-standalone-html",
   "license": "MIT",
   "preferGlobal": true,
-  "bin": "./bin/markdown-to-standalone-html.js",
+  "bin": "./dist/markdown-to-standalone-html.js",
+  "scripts": {
+    "clean": "rimraf dist/",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "lint": "ts-standard --fix",
+    "watch": "tsc -w"
+  },
   "dependencies": {
     "@traptitech/markdown-it-katex": "^3.3.1",
-    "bootstrap": "^4.6.0",
-    "commander": "^7.1.0",
-    "highlight.js": "^10.6.0",
+    "bootstrap": "^5.1.3",
+    "chordsong": "file:../chordsong",
+    "commander": "^8.3.0",
+    "highlight.js": "^11.3.1",
     "html-minifier": "^4.0.0",
     "image-type": "^4.1.0",
     "is-svg": "^4.2.1",
     "jquery": "^3.5.1",
     "markdown-it": "^12.0.4",
-    "markdown-it-anchor": "^7.0.2",
+    "markdown-it-anchor": "^8.4.1",
     "markdown-it-chords": "^1.0.3",
     "markdown-it-implicit-figures": "^0.10.0",
     "markdown-toc": "^1.2.0",
     "sync-request": "^6.1.0",
+    "ts-node-dev": "^1.1.8",
     "uslug": "^1.0.4"
   },
+  "ts-standard": {
+    "ignore": [
+      "/dist/"
+    ]
+  },
   "devDependencies": {
-    "standard": "^16.0.3"
+    "@types/html-minifier": "^4.0.1",
+    "@types/katex": "^0.11.1",
+    "@types/node": "^14.0.0",
+    "@types/uslug": "^1.0.1",
+    "rimraf": "^3.0.2",
+    "ts-standard": "^10.0.0",
+    "typescript": "^4.4.4"
   }
 }
