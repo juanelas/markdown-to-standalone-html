@@ -10,17 +10,31 @@ import { program } from 'commander'
 
 const pkgJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'))
 
+program.showHelpAfterError()
+
 program.version(pkgJson.version, '-v, --version', 'output the current version')
+
+program.description(`${pkgJson.description as string}
+
+Math support is provided with KATEX using standard LaTeX formulae. Surround your LaTeX with a single '$' on each side for inline rendering, or between '$$' for block rendering.
+
+Fenced code blocks are highlighted using [highlight.js](https://highlightjs.org/).
+
+A fenced code block with language 'chordsong' or 'song' can be used to render a song with lyrics and chords using chordsong (https://github.com/juanelas/chordsong). You can alternatively use language 'chords' which will use markdown-it-chords (https://github.com/dnotes/markdown-it-chords) instead.
+
+See example/example.md and its rendered version example/example.html for more help.
+`)
 
 program.arguments('<inputfile>')
 
-program.option('-a, --enable-all', 'enable all plugins')
 program.option('-A, --disable-all', 'disable all plugins')
 
 program.option('-B, --disable-bootstrap', 'disable embedding the bootstrap CSS in the generated html file')
-program.option('-bj, --enable-bootstrap-js', 'enable embedding bootstrap JS files in the generated html file')
+program.option('-bj, --enable-bootstrap-js', 'enable embedding bootstrap JS files in the generated html file. It may be useful when using a custom theme')
 
-program.option('-c, --chords', 'enable support for rendering lyrics with chords using markdown-it-chords. Songs must be placed inside a fenced code block with language \'chords\'. See examples/example.md for details')
+program.option('-C, --disable-chords', 'disable support for rendering lyrics with chords using chordsong')
+
+program.option('-CC, --disable-code-chords', 'disable support for rendering lyrics with chords using code-chords')
 
 program.option('-H, --disable-highlightjs', 'disable syntax highlighting of fenced code blocks with highlight.js')
 program.option('-hs, --highlightjs-style <stylename>', 'set the highlight.js style. See https://github.com/highlightjs/highlight.js/tree/master/src/styles', 'vs2015')
@@ -36,11 +50,11 @@ program.option('--toc-title <title>', 'the title used for the TOC', 'Table of co
 program.parse(process.argv)
 
 const inputFile: string = program.args[0]
-if (inputFile === '') program.help()
 
 const mdContents = fs.readFileSync(inputFile, 'utf8')
 
 const programOptions = program.opts()
+
 let outputFile: string = programOptions.output
 if (outputFile === undefined) {
   const pos = inputFile.lastIndexOf('.')
@@ -50,12 +64,13 @@ if (outputFile === undefined) {
 const plugins: Plugin[] = []
 
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableHighlightjs)) plugins.push({ name: 'highlightjs', options: { theme: programOptions.highlightjsStyle } })
-if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableBootstrap)) plugins.push({ name: 'bootstrapCss' })
-if (programOptions.enableAll || (!programOptions.disableAll && programOptions.enableBootstrapJs)) plugins.push({ name: 'bootstrapJs' })
-if (programOptions.enableAll || (!programOptions.disableAll && !programOptions.disableKatex)) plugins.push({ name: 'katex' })
+if (!programOptions.disableAll && !programOptions.disableHighlightjs) plugins.push({ name: 'highlightjs', options: { theme: programOptions.highlightjsStyle } })
+if (!programOptions.disableAll && !programOptions.disableBootstrap) plugins.push({ name: 'bootstrapCss' })
+if (!programOptions.disableAll && programOptions.enableBootstrapJs) plugins.push({ name: 'bootstrapJs' })
+if (!programOptions.disableAll && !programOptions.disableKatex) plugins.push({ name: 'katex' })
 if (!programOptions.disableAll && programOptions.tocMaxDepth > 0) plugins.push({ name: 'toc', options: { tocMaxDepth: Number(programOptions.tocMaxDepth), tocTitle: programOptions.tocTitle } })
-if (programOptions.enableAll || (!programOptions.disableAll && programOptions.chords)) plugins.push({ name: 'code-chords' })
+if (!programOptions.disableAll && !programOptions.disableChords) plugins.push({ name: 'chordsong' })
+if (!programOptions.disableAll && !programOptions.disableCodeChords) plugins.push({ name: 'code-chords' })
 /* eslint-enable @typescript-eslint/strict-boolean-expressions */
 
 const options = {
@@ -70,5 +85,5 @@ markdownToStandAloneHtml(mdContents, options).then((htmlContents) => {
     console.log('Output saved to ' + outputFile)
   })
 }).catch((error) => {
-  console.log(error)
+  console.error(error)
 })

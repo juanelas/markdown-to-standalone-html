@@ -10,8 +10,8 @@ export default function codeChords (md: MarkdownIt): void {
   md.renderer.rules.fence = function (tokens, idx, options, env, self) {
     const token = tokens[idx]
 
-    if (token.tag === 'code' && token.info === 'song') {
-      return `<div class="song">${mdChords.render(token.content)}</song>`
+    if (token.tag === 'code' && token.info === 'chords') {
+      return `<song>${mdChords.render(token.content)}</song>`
     }
 
     // pass token to default renderer.

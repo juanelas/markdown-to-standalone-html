@@ -49,20 +49,47 @@ module.exports = function chords (md) {
 
 ## Song lyrics with chords
 
-You can also render songs (lyrics with chords) using [markdown-it-chords](https://github.com/dnotes/markdown-it-chords). For compatibility reasons, only songs in fenced code blocks with language `song` will be rendered.
+You can also render songs (lyrics with chords) using [chordsong](https://github.com/juanelas/chordsong) or [markdown-it-chords](https://github.com/dnotes/markdown-it-chords).
+
+Rendering a song involves writting it a a fenced code block with language set to :
+
+- `song` or `chordsong` for [chordsong](https://github.com/juanelas/chordsong)
+- `chords` for [markdown-it-chords](https://github.com/dnotes/markdown-it-chords)
+
+### A song using chordsong
 
 ```song
+{title: Lucía}
+{artist: Rosario}
+{composer: Joan Manuel Serrat}
+{capo: 4th fret}
+{tempo: 4/4 83 bpm}
+
+Am[x02210]
+Am/C[x32210]
+Bm7b5[x2323x]
+Eaug[0xx11x]
+E7[020100]
+Asus2/G[302200]
+Dm6/F[1x020x]
+E7sus4[020200]
+
+              Am 
+Vuela esta canción
+Am/C          Bm7b5
+   para ti, Lucía,
+Eaug  E7          Am        Asus2/G
+  la más bella historia de amor
+    Dm6/F      E7sus4 E7
+que tuve y tendré.
+
+```
+
+### A song using markdown-it-chords
+
+```chords
 [C]Do, a deer, a female deer
 [Dm]Ray, a drop of golden sun
 [Eb]May, a possi[D#]bility
 [D/F#]Fee, the price you pay to run
-```
-
-```song
-(half-time, bossanova guitar)
-[CΔ913]So, — I'd [C6]like to see Bra[Fmaj9]zil . . . . .[F6(9)]
-[E-7b13]La, — I'd [CM7sus2]really like to [E9]go . . .[E7b9]
-[AmΔ7/9]Tea, — I [A-7]sit and sip so [D#ø7]slow . . .[D#o7]
-That will [Dm7|x57565]bring — [F6(9)|x87788]us —— [Em7|x79787]back — [G13|x,10,x,12,12,12]to —— [8xx987]Do . . . .[3,5,5,3,3,3]
-[0,10,12,14,x,1]asd
 ```

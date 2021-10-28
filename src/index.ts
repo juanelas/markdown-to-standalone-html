@@ -11,6 +11,7 @@ import mdToc from 'markdown-toc'
 import mdImg from './plugins/markdown-it-embedded-images'
 import mdKatex from '@traptitech/markdown-it-katex'
 import mdChords from './plugins/markdown-it-code-chords'
+import mdChordsong from './plugins/markdown-it-chordsong'
 
 export interface Plugin {
   name: string
@@ -113,6 +114,11 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
   if (plugin !== undefined) {
     md.use(mdChords)
     cssArr.push(fs.readFileSync(require.resolve('markdown-it-chords/markdown-it-chords.css'), 'utf-8'))
+  }
+
+  plugin = plugins.find(plugin => plugin.name === 'chordsong')
+  if (plugin !== undefined) {
+    md.use(mdChordsong, cssArr)
   }
 
   plugin = plugins.find(plugin => plugin.name === 'bootstrapCss')
