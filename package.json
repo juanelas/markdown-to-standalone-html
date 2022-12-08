@@ -1,6 +1,6 @@
 {
   "name": "markdown-to-standalone-html",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Markdown to standalone HTML converter. It generates a standalone HTML with all CSS and images embedded, browsable responsible TOC, math support (KATEX), code syntax highlighting (highlight.js), and rendering of lyrics with chords",
   "keywords": [
     "markdown",
