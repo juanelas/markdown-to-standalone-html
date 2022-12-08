@@ -58,12 +58,13 @@ Rendering a song involves writting it a a fenced code block with language set to
 
 ### A song using chordsong
 
-```song
+```chordsong
 {title: Lucía}
 {artist: Rosario}
 {composer: Joan Manuel Serrat}
 {capo: 4th fret}
 {tempo: 4/4 83 bpm}
+{columns: 1}
 
 Am[x02210]
 Am/C[x32210]
