@@ -42,7 +42,8 @@ program.option('-hs, --highlightjs-style <stylename>', 'set the highlight.js sty
 program.option('-K, --disable-katex', 'disable math support (prevents embedding the KaTeX CSS and fonts)')
 
 program.option('-o, --output <outputfile>', 'set the output file name. If omitted the output filename is the input one with the extension switched to .html')
-program.option('-t, --template <template>', 'force using a user-provided template instead of the default one. Generate two files yourtemplate.html and yourtemplate.toc.html. Take a look to template.html (no toc version) and template.toc.html (TOC version) for inspiration.')
+
+program.option('-t, --template <template>', 'force using a user-provided template instead of the default one. Generate two files <template>.html and <template>.toc.html. Take a look to template.html (no toc version) and template.toc.html (TOC version) for inspiration.')
 
 program.option('-d, --toc-max-depth <depth>', 'the TOC will only use headings whose depth is at most maxdepth. A value of 0 disables the TOC', '3')
 program.option('--toc-title <title>', 'the title used for the TOC', 'Table of contents')
@@ -58,7 +59,14 @@ const programOptions = program.opts()
 let outputFile: string = programOptions.output
 if (outputFile === undefined) {
   const pos = inputFile.lastIndexOf('.')
-  outputFile = inputFile.substr(0, pos < 0 ? inputFile.length : pos) + '.html'
+  outputFile = inputFile.slice(0, pos < 0 ? inputFile.length : pos) + '.html'
+}
+
+let template: string | undefined
+if (programOptions.template !== undefined) {
+  template = path.isAbsolute(programOptions.template)
+    ? programOptions.template
+    : path.resolve('.', programOptions.template)
 }
 
 const plugins: Plugin[] = []
@@ -75,7 +83,7 @@ if (!programOptions.disableAll && !programOptions.disableCodeChords) plugins.pus
 
 const options = {
   basePath: path.dirname(inputFile),
-  template: programOptions.template,
+  template,
   plugins
 }
 

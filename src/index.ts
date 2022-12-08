@@ -20,15 +20,15 @@ export interface Plugin {
 
 interface Options {
   basePath: string
-  template: string
+  template: string // an absolute path to the template file. Either '.html' or '.toc.html'
   plugins: Plugin[]
 }
 
 export default async function markdownToStandAloneHtml (mdContents: string, {
   basePath = '.',
-  template = '../templates/template.html',
+  template = path.resolve(__dirname, '..', 'templates', 'template.html'),
   plugins = []
-}: Options): Promise<string> {
+}: Partial<Options>): Promise<string> {
   const mdItOptions = {
     html: true, // Enable HTML tags in source
     xhtmlOut: false, // Use '/' to close single tags (<br />).
@@ -80,11 +80,18 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
     link: false // <a href="img.png"><img src="img.png"></a>, default: false
   })
 
-  let templateStr = fs.readFileSync(path.join(__dirname, template), 'utf8')
+  let templateStr: string
+  if (template.length > 8 && template.slice(-9) === '.toc.html') {
+    template = template.slice(0, template.length - 9) + '.html'
+  }
 
   plugin = plugins.find(plugin => plugin.name === 'toc')
   if (plugin !== undefined) {
-    templateStr = fs.readFileSync(path.join(__dirname, path.dirname(template), `${path.basename(template, '.html')}.toc.html`), 'utf8')
+    const templateFileWithToc = path.join(path.dirname(template), `${path.basename(template, '.html')}.toc.html`)
+    if (!fs.existsSync(templateFileWithToc)) {
+      throw new Error(`Can't find template file '${templateFileWithToc}'`)
+    }
+    templateStr = fs.readFileSync(templateFileWithToc, 'utf8')
 
     md.use(mdAnchor, { level: 2, slugify: uslug })
 
@@ -93,6 +100,11 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
     // @ts-expect-error
     templateStr = templateStr.replace('<!-- {{TOC_TITLE}} -->', plugin.options.tocTitle)
       .replace('<!-- {{TOC}} -->', tocContents)
+  } else {
+    if (!fs.existsSync(template)) {
+      throw new Error(`Can't find template file '${template}'`)
+    }
+    templateStr = fs.readFileSync(template, 'utf8')
   }
 
   md.use(mdImg, basePath)
