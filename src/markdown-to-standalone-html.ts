@@ -43,6 +43,8 @@ program.option('-K, --disable-katex', 'disable math support (prevents embedding 
 
 program.option('-o, --output <outputfile>', 'set the output file name. If omitted the output filename is the input one with the extension switched to .html')
 
+program.option('-OL, --disable-open-link', 'disable opening links in a new tab or window')
+
 program.option('-t, --template <template>', 'force using a user-provided template instead of the default one. Generate two files <template>.html and <template>.toc.html. Take a look to template.html (no toc version) and template.toc.html (TOC version) for inspiration.')
 
 program.option('-d, --toc-max-depth <depth>', 'the TOC will only use headings whose depth is at most maxdepth. A value of 0 disables the TOC', '3')
@@ -76,6 +78,7 @@ if (!programOptions.disableAll && !programOptions.disableHighlightjs) plugins.pu
 if (!programOptions.disableAll && !programOptions.disableBootstrap) plugins.push({ name: 'bootstrapCss' })
 if (!programOptions.disableAll && programOptions.enableBootstrapJs) plugins.push({ name: 'bootstrapJs' })
 if (!programOptions.disableAll && !programOptions.disableKatex) plugins.push({ name: 'katex' })
+if (!programOptions.disableAll && !programOptions.disableOpenLink) plugins.push({ name: 'open-link' })
 if (!programOptions.disableAll && programOptions.tocMaxDepth > 0) plugins.push({ name: 'toc', options: { tocMaxDepth: Number(programOptions.tocMaxDepth), tocTitle: programOptions.tocTitle } })
 if (!programOptions.disableAll && !programOptions.disableChords) plugins.push({ name: 'chordsong' })
 if (!programOptions.disableAll && !programOptions.disableCodeChords) plugins.push({ name: 'code-chords' })

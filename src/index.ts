@@ -12,6 +12,7 @@ import mdImg from './plugins/markdown-it-embedded-images'
 import mdKatex from '@traptitech/markdown-it-katex'
 import mdChords from './plugins/markdown-it-code-chords'
 import mdChordsong from './plugins/markdown-it-chordsong'
+import mdOpenLink from './plugins/markdown-it-open-link'
 
 export interface Plugin {
   name: string
@@ -143,6 +144,11 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
     const removeMapRegEx = /\/{2}# sourceMappingURL=\S*/g
     scriptArr.push(fs.readFileSync(require.resolve('jquery/dist/jquery.slim.min.js'), 'utf8').replace(removeMapRegEx, ''))
     scriptArr.push(fs.readFileSync(require.resolve('bootstrap/dist/js/bootstrap.bundle.min.js'), 'utf8').replace(removeMapRegEx, ''))
+  }
+
+  plugin = plugins.find(plugin => plugin.name == 'open-link')
+  if (plugin !== undefined) {
+    md.use(mdOpenLink)
   }
 
   const main = md.render(mdContents)
