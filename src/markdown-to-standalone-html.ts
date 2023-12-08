@@ -3,10 +3,9 @@
 import fs from 'fs'
 import path from 'path'
 // import pkgJson from '../package.json'
-
 import markdownToStandAloneHtml, { Plugin } from './index'
-
 import { program } from 'commander'
+const YAML = require('yaml-front-matter')
 
 const pkgJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'))
 
@@ -54,7 +53,14 @@ program.parse(process.argv)
 
 const inputFile: string = program.args[0]
 
-const mdContents = fs.readFileSync(inputFile, 'utf8')
+const fileContents = fs.readFileSync(inputFile, 'utf8')
+const mdLines = fileContents.split('\n')
+
+// Retrieve the front matter
+const yaml = YAML.loadFront(fileContents)
+
+// Remove the front matter if present
+const mdContents = mdLines[0] === '---' ? mdLines.slice(mdLines.indexOf('---', 1) + 1).join('\n') : fileContents
 
 const programOptions = program.opts()
 
@@ -65,10 +71,14 @@ if (outputFile === undefined) {
 }
 
 let template: string | undefined
-if (programOptions.template !== undefined) {
+if (yaml.template !== undefined) {
+  template = path.resolve('.', 'templates/' + yaml.template + '.html')
+} else if (programOptions.template !== undefined) {
   template = path.isAbsolute(programOptions.template)
     ? programOptions.template
     : path.resolve('.', programOptions.template)
+} else {
+  template = path.resolve('.', 'templates/template.html')
 }
 
 const plugins: Plugin[] = []
