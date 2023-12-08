@@ -1,7 +1,7 @@
 {
   "name": "markdown-to-standalone-html",
-  "version": "2.1.1",
-  "description": "Markdown to standalone HTML converter. It generates a standalone HTML with all CSS and images embedded, browsable responsible TOC, math support (KATEX), code syntax highlighting (highlight.js), and rendering of lyrics with chords",
+  "version": "0.3.0",
+  "description": "Markdown to standalone HTML converter with YAML support. It generates a standalone HTML with all CSS and images embedded, browsable responsible TOC, math support (KATEX), code syntax highlighting (highlight.js), and rendering of lyrics with chords. Forked from juanelas/markdown-to-standalone-html.",
   "keywords": [
     "markdown",
     "markdown-it",
@@ -16,11 +16,11 @@
   ],
   "main": "./dist/index.js",
   "author": {
-    "name": "Juan Hernández Serrano",
-    "email": "j.hernandez@upc.edu",
-    "url": "https://github.com/juanelas"
+    "name": "Michael Eisenbraun",
+    "email": "eisenbm@algonquincollege.com",
+    "url": "https://github.com/eisenbm"
   },
-  "repository": "github:juanelas/markdown-to-standalone-html",
+  "repository": "github:eisenbm/markdown-to-standalone-html",
   "license": "MIT",
   "preferGlobal": true,
   "bin": "./dist/markdown-to-standalone-html.js",
@@ -35,18 +35,18 @@
   },
   "dependencies": {
     "@traptitech/markdown-it-katex": "^3.3.1",
-    "bootstrap": "^5.1.3",
-    "chordsong": "^1.0.2",
-    "commander": "^9.0.0",
-    "highlight.js": "^11.3.1",
+    "bootstrap": "^5.3.2",
+    "chordsong": "^1.1.0",
+    "commander": "^11.0.0",
+    "highlight.js": "^11.9.0",
     "html-minifier": "^4.0.0",
     "image-type": "^4.1.0",
-    "is-svg": "^4.2.1",
-    "jquery": "^3.5.1",
+    "is-svg": "^4.4.0",
+    "jquery": "^3.7.1",
     "markdown-it": "^13.0.1",
-    "markdown-it-anchor": "^8.4.1",
+    "markdown-it-anchor": "^8.6.7",
     "markdown-it-chords": "^1.0.3",
-    "markdown-it-implicit-figures": "^0.10.0",
+    "markdown-it-implicit-figures": "^0.12.0",
     "markdown-toc": "^1.2.0",
     "sync-request": "^6.1.0",
     "uslug": "^1.0.4",
@@ -58,13 +58,13 @@
     ]
   },
   "devDependencies": {
-    "@types/html-minifier": "^4.0.1",
-    "@types/katex": "^0.11.1",
-    "@types/node": "^14.0.0",
-    "@types/uslug": "^1.0.1",
+    "@types/html-minifier": "^4.0.5",
+    "@types/katex": "^0.16.7",
+    "@types/node": "^20.10.4",
+    "@types/uslug": "^1.0.4",
     "@types/yaml-front-matter": "^4.1.3",
-    "rimraf": "^3.0.2",
-    "ts-standard": "^11.0.0",
-    "typescript": "^4.4.4"
+    "rimraf": "^5.0.5",
+    "ts-standard": "^12.0.0",
+    "typescript": "^5.3.3"
   }
 }
