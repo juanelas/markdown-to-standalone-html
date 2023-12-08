@@ -1,7 +1,7 @@
 {
   "name": "markdown-to-standalone-html",
-  "version": "2.1.1",
-  "description": "Markdown to standalone HTML converter. It generates a standalone HTML with all CSS and images embedded, browsable responsible TOC, math support (KATEX), code syntax highlighting (highlight.js), and rendering of lyrics with chords",
+  "version": "0.3.0",
+  "description": "Markdown to standalone HTML converter with YAML support. It generates a standalone HTML with all CSS and images embedded, browsable responsible TOC, math support (KATEX), code syntax highlighting (highlight.js), and rendering of lyrics with chords. Forked from juanelas/markdown-to-standalone-html.",
   "keywords": [
     "markdown",
     "markdown-it",
@@ -16,11 +16,11 @@
   ],
   "main": "./dist/index.js",
   "author": {
-    "name": "Juan Hernández Serrano",
-    "email": "j.hernandez@upc.edu",
-    "url": "https://github.com/juanelas"
+    "name": "Michael Eisenbraun",
+    "email": "eisenbm@algonquincollege.com",
+    "url": "https://github.com/eisenbm"
   },
-  "repository": "github:juanelas/markdown-to-standalone-html",
+  "repository": "github:eisenbm/markdown-to-standalone-html",
   "license": "MIT",
   "preferGlobal": true,
   "bin": "./dist/markdown-to-standalone-html.js",
