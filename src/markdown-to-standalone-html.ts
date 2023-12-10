@@ -46,7 +46,7 @@ program.option('-OL, --disable-open-link', 'disable opening links in a new tab o
 
 program.option('-t, --template <template>', 'force using a user-provided template instead of the default one. Generate two files <template>.html and <template>.toc.html. Take a look to template.html (no toc version) and template.toc.html (TOC version) for inspiration.')
 
-program.option('-d, --toc-max-depth <depth>', 'the TOC will only use headings whose depth is at most maxdepth. A value of 0 disables the TOC', '3')
+program.option('-d, --toc-max-depth <depth>', 'the TOC will only use headings whose depth is at most maxdepth. A value of 0 disables the TOC', '0')
 program.option('--toc-title <title>', 'the title used for the TOC', 'Table of contents')
 
 program.parse(process.argv)
@@ -72,13 +72,14 @@ if (outputFile === undefined) {
 
 let template: string | undefined
 if (yaml.template !== undefined) {
-  template = path.resolve('.', 'templates/' + yaml.template + '.html')
+  template = path.resolve(__dirname, '../templates/' + yaml.template + '.html')
 } else if (programOptions.template !== undefined) {
   template = path.isAbsolute(programOptions.template)
     ? programOptions.template
     : path.resolve('.', programOptions.template)
 } else {
-  template = path.resolve('.', 'templates/template.html')
+  // template = path.resolve('.', 'templates/basic.html')
+  template = path.resolve(__dirname, '../templates/basic.html')
 }
 
 const plugins: Plugin[] = []

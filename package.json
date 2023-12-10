@@ -31,6 +31,7 @@
     "postbuild": "chmod +x ./dist/markdown-to-standalone-html.js",
     "lint": "ts-standard --fix",
     "watch": "tsc -w",
+    "sass:watch": "sass --watch --style=compressed templates/scss:templates/css",
     "test": "./dist/markdown-to-standalone-html.js example/example.md"
   },
   "dependencies": {

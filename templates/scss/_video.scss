@@ -1,0 +1,45 @@
+.video {
+  margin-top: calc(0.5rem - 3.6rem);
+  padding-top: calc(1rem + 3.6rem);
+}
+
+.video p {
+  margin-top: 0;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+  margin-top: 15px;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-disclaimer {
+  margin: 0 0 -5px 0;
+  padding: 0.5em 0.75em;
+
+  background-color: #fff6c7;
+  border-left: 0.5em solid #e7c000;
+  color: #887935;
+}
+
+.content .video .video-disclaimer a {
+  display: flex;
+  align-items: center;
+  color: #887935;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.content .video .video-disclaimer a:hover {
+  text-decoration: none;
+}
