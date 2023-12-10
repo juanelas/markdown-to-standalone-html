@@ -1,0 +1,23 @@
+pre {
+  box-shadow: var(--me-box-shadow);
+  border-radius: 6px;
+}
+
+pre code.hljs {
+    line-height: 1.6;
+    padding: 2.4rem;
+    border-radius: 6px;
+    overflow: auto;
+}
+
+code {
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;;
+  color: #4e6e8e;
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+  font-size: .85em;
+  background-color: #f3f4f5;
+  border-radius: 3px;
+  overflow-wrap: break-word;
+  transition: background-color .3s ease;
+}

@@ -1,0 +1,19 @@
+table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  display: block;
+  overflow-x: auto;
+}
+
+tr {
+  border-top: 1px solid #dfe2e5;
+}
+
+th, td {
+  padding: 0.6em 1em;
+  border: 1px solid #dfe2e5;
+}
+
+th {
+  text-align: center;
+}
