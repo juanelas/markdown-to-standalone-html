@@ -20,7 +20,7 @@ function getFiles (dirPath: string, arrayOfFiles: Array<string> = []) {
   console.log(distPath)
   exec(`mkdir ${distPath}`)
 
-  files.filter(file => !ignore.includes(file)).forEach(function (file) {
+  files.filter((file: string) => !ignore.includes(file)).forEach(function (file:string) {
     console.log(dirPath)
     if (fs.lstatSync(dirPath + '/' + file).isDirectory()) {
       arrayOfFiles = getFiles(dirPath + '/' + file, arrayOfFiles)
@@ -34,8 +34,6 @@ function getFiles (dirPath: string, arrayOfFiles: Array<string> = []) {
 
 function convertFiles (files: Array<string>, srcFolder: string, distFolder: string) {
   files.forEach(file => {
-    const filename = file.substring(0, file.lastIndexOf('.'))
-    
     const inputPath = file
     const outputPath = file.replace(srcFolder, distFolder).replace('.md', '.html')
 
@@ -44,7 +42,7 @@ function convertFiles (files: Array<string>, srcFolder: string, distFolder: stri
 }
 
 function convertFile (inputPath: string, outputPath: string) {
-  fs.readFile(inputPath, 'utf8', function (err, fileContents) {
+  fs.readFile(inputPath, 'utf8', function (err: string, fileContents: string) {
     const yaml = YAML.loadFront(fileContents)
     const filename = outputPath.substring(outputPath.lastIndexOf('/'), outputPath.lastIndexOf('.'))
     const title = yaml.title || unslugify(filename)
@@ -52,7 +50,7 @@ function convertFile (inputPath: string, outputPath: string) {
     outputPath = outputPath.replace(filename, `"${title}"`)
     console.log(filename, outputPath)
 
-    exec(`./dist/markdown-to-standalone-html.js -K -C -CC -B -hs atom-one-dark-reasonable -d 0 -o ${outputPath} ${inputPath}`, function(err, stdout, stderr) {
+    exec(`./dist/markdown-to-standalone-html.js -K -C -CC -B -hs atom-one-dark-reasonable -d 0 -o ${outputPath} ${inputPath}`, function(err: string, stdout: string, stderr: string) {
       if (err) {
         console.log(err)
         return
