@@ -1,6 +1,6 @@
 {
   "name": "markdown-to-standalone-html",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Markdown to standalone HTML converter with YAML support. It generates a standalone HTML with all CSS and images embedded, browsable responsible TOC, math support (KATEX), code syntax highlighting (highlight.js), and rendering of lyrics with chords. Forked from juanelas/markdown-to-standalone-html.",
   "keywords": [
     "markdown",
