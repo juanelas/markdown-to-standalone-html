@@ -8,5 +8,5 @@ interface Options {
     stylesheet: string;
     plugins: Plugin[];
 }
-export default function markdownToStandAloneHtml(mdContents: string, { basePath, template, stylesheet, plugins }: Partial<Options>): Promise<string>;
+export default function markdownToStandAloneHtml(mdContents: string, { basePath, template, plugins }: Partial<Options>): Promise<string>;
 export {};

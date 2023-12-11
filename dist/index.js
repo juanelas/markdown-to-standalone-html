@@ -17,7 +17,7 @@ const markdown_it_katex_1 = __importDefault(require("@traptitech/markdown-it-kat
 const markdown_it_code_chords_1 = __importDefault(require("./plugins/markdown-it-code-chords"));
 const markdown_it_chordsong_1 = __importDefault(require("./plugins/markdown-it-chordsong"));
 const markdown_it_open_link_1 = __importDefault(require("./plugins/markdown-it-open-link"));
-async function markdownToStandAloneHtml(mdContents, { basePath = '.', template = path_1.default.resolve(__dirname, '..', 'templates', 'template.html'), stylesheet = path_1.default.resolve(__dirname, '..', 'templates/css', 'template.css'), plugins = [] }) {
+async function markdownToStandAloneHtml(mdContents, { basePath = '.', template = path_1.default.resolve(__dirname, '..', 'templates', 'template.html'), plugins = [] }) {
     const mdItOptions = {
         html: true,
         xhtmlOut: false,
@@ -107,7 +107,6 @@ async function markdownToStandAloneHtml(mdContents, { basePath = '.', template =
     if (plugin !== undefined) {
         md.use(markdown_it_open_link_1.default);
     }
-    cssArr.push(fs_1.default.readFileSync(require.resolve(stylesheet)));
     const main = md.render(mdContents);
     const titleRegex = /<h1>(.+?)<\/h1>/s;
     const titleMatch = main.match(titleRegex);

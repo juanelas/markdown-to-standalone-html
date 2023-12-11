@@ -71,18 +71,17 @@ if (outputFile === undefined) {
 }
 
 let template: string | undefined
-let stylesheet: string | undefined
 if (yaml.template !== undefined) {
-  template = path.resolve(__dirname, '../templates/' + yaml.template + '.html')
-  stylesheet = path.resolve(__dirname, '../templates/css/' + yaml.template + '.css')
+  template = path.resolve('./node_modules/accontent-templates/templates/' + yaml.template + '.html')
 } else if (programOptions.template !== undefined) {
   template = path.isAbsolute(programOptions.template)
     ? programOptions.template
     : path.resolve('.', programOptions.template)
-} else {
+} else if (fs.existsSync(path.resolve('./node_modules/accontent-templates/templates/basic.html'))) {
+  template = path.resolve('./node_modules/accontent-templates/templates/basic.html')
+}  else {
   // template = path.resolve('.', 'templates/basic.html')
-  template = path.resolve(__dirname, '../templates/basic.html')
-  stylesheet = path.resolve(__dirname, '../templates/css/basic.css')
+  template = path.resolve(__dirname, '../templates/template.html')
 }
 
 const plugins: Plugin[] = []
@@ -101,7 +100,6 @@ if (!programOptions.disableAll && !programOptions.disableCodeChords) plugins.pus
 const options = {
   basePath: path.dirname(inputFile),
   template,
-  stylesheet,
   plugins
 }
 

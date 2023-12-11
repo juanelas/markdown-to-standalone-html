@@ -29,7 +29,6 @@ interface Options {
 export default async function markdownToStandAloneHtml (mdContents: string, {
   basePath = '.',
   template = path.resolve(__dirname, '..', 'templates', 'template.html'),
-  stylesheet = path.resolve(__dirname, '..', 'templates/css', 'template.css'),
   plugins = []
 }: Partial<Options>): Promise<string> {
   const mdItOptions = {
@@ -152,10 +151,6 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
   if (plugin !== undefined) {
     md.use(mdOpenLink)
   }
-
-  // inline the basic stylesheet
-  // TODO: Make this more dynamic
-  cssArr.push(fs.readFileSync(require.resolve(stylesheet)))
 
   const main = md.render(mdContents)
 

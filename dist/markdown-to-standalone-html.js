@@ -49,19 +49,19 @@ if (outputFile === undefined) {
     outputFile = inputFile.slice(0, pos < 0 ? inputFile.length : pos) + '.html';
 }
 let template;
-let stylesheet;
 if (yaml.template !== undefined) {
-    template = path_1.default.resolve(__dirname, '../templates/' + yaml.template + '.html');
-    stylesheet = path_1.default.resolve(__dirname, '../templates/css/' + yaml.template + '.css');
+    template = path_1.default.resolve('./node_modules/accontent-templates/templates/' + yaml.template + '.html');
 }
 else if (programOptions.template !== undefined) {
     template = path_1.default.isAbsolute(programOptions.template)
         ? programOptions.template
         : path_1.default.resolve('.', programOptions.template);
 }
+else if (fs_1.default.existsSync(path_1.default.resolve('./node_modules/accontent-templates/templates/basic.html'))) {
+    template = path_1.default.resolve('./node_modules/accontent-templates/templates/basic.html');
+}
 else {
-    template = path_1.default.resolve(__dirname, '../templates/basic.html');
-    stylesheet = path_1.default.resolve(__dirname, '../templates/css/basic.css');
+    template = path_1.default.resolve(__dirname, '../templates/template.html');
 }
 const plugins = [];
 if (!programOptions.disableAll && !programOptions.disableHighlightjs)
@@ -83,7 +83,6 @@ if (!programOptions.disableAll && !programOptions.disableCodeChords)
 const options = {
     basePath: path_1.default.dirname(inputFile),
     template,
-    stylesheet,
     plugins
 };
 (0, index_1.default)(mdContents, options).then((htmlContents) => {
