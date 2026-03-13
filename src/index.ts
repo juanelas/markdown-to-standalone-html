@@ -29,6 +29,8 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
   template = path.resolve(__dirname, '..', 'templates', 'template.html'),
   plugins = []
 }: Partial<Options>): Promise<string> {
+  const cleanedMdContents = mdContents.replace(/<!--[\s\S]*?-->/g, '')
+
   const mdItOptions = {
     html: true, // Enable HTML tags in source
     xhtmlOut: false, // Use '/' to close single tags (<br />).
@@ -85,6 +87,18 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
     template = template.slice(0, template.length - 9) + '.html'
   }
 
+  plugin = plugins.find(plugin => plugin.name === 'bootstrapCss')
+  if (plugin !== undefined) {
+    cssArr.push(fs.readFileSync(require.resolve('bootstrap/dist/css/bootstrap.css'), 'utf8'))
+  }
+
+  plugin = plugins.find(plugin => plugin.name === 'bootstrapJs')
+  if (plugin !== undefined) {
+    const removeMapRegEx = /\/{2}# sourceMappingURL=\S*/g
+    scriptArr.push(fs.readFileSync(require.resolve('jquery/dist/jquery.slim.min.js'), 'utf8').replace(removeMapRegEx, ''))
+    scriptArr.push(fs.readFileSync(require.resolve('bootstrap/dist/js/bootstrap.bundle.min.js'), 'utf8').replace(removeMapRegEx, ''))
+  }
+
   plugin = plugins.find(plugin => plugin.name === 'toc')
   if (plugin !== undefined) {
     const templateFileWithToc = path.join(path.dirname(template), `${path.basename(template, '.html')}.toc.html`)
@@ -96,7 +110,7 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
     md.use(mdAnchor, { level: 2, slugify: uslug })
 
     // @ts-expect-error
-    const tocContents = md.render(mdToc(mdContents, { firsth1: false, slugify: uslug, maxdepth: plugin.options.tocMaxDepth }).content)
+    const tocContents = md.render(mdToc(cleanedMdContents, { firsth1: false, slugify: uslug, maxdepth: plugin.options.tocMaxDepth }).content)
     // @ts-expect-error
     templateStr = templateStr.replace('<!-- {{TOC_TITLE}} -->', plugin.options.tocTitle)
       .replace('<!-- {{TOC}} -->', tocContents)
@@ -133,19 +147,7 @@ export default async function markdownToStandAloneHtml (mdContents: string, {
     md.use(mdChordsong, cssArr)
   }
 
-  plugin = plugins.find(plugin => plugin.name === 'bootstrapCss')
-  if (plugin !== undefined) {
-    cssArr.push(fs.readFileSync(require.resolve('bootstrap/dist/css/bootstrap.css'), 'utf8'))
-  }
-
-  plugin = plugins.find(plugin => plugin.name === 'bootstrapJs')
-  if (plugin !== undefined) {
-    const removeMapRegEx = /\/{2}# sourceMappingURL=\S*/g
-    scriptArr.push(fs.readFileSync(require.resolve('jquery/dist/jquery.slim.min.js'), 'utf8').replace(removeMapRegEx, ''))
-    scriptArr.push(fs.readFileSync(require.resolve('bootstrap/dist/js/bootstrap.bundle.min.js'), 'utf8').replace(removeMapRegEx, ''))
-  }
-
-  const main = md.render(mdContents)
+  const main = md.render(cleanedMdContents)
 
   const titleRegex = /<h1>(.+?)<\/h1>/s
   const titleMatch = main.match(titleRegex)

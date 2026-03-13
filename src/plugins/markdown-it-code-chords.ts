@@ -1,6 +1,6 @@
 import MarkdownIt from 'markdown-it'
 import mdItChords from 'markdown-it-chords'
-import { RenderRule } from 'markdown-it/lib/renderer'
+import { type RenderRule } from 'markdown-it/lib/renderer.mjs'
 
 const mdChords = MarkdownIt({ breaks: true }).use(mdItChords)
 

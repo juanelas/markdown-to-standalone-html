@@ -2,12 +2,14 @@
 
 ## Embedded images
 
-The following online image in your markdown source will be embedded in the generated html with Base64
+- The following online PNG image in your markdown source will be embedded in the generated html
+  ![Homer Simpson](http://pngimg.com/uploads/simpsons/simpsons_PNG5.png)
 
-![Homer Simpson](http://pngimg.com/uploads/simpsons/simpsons_PNG5.png)
+- The following local PNG image in your markdown source will be embedded in the generated html
+  ![Homer Simpson](./futurama_PNG15.png)
 
-The following local image in your markdown source will be embedded in the generated html
-![Homer Simpson](./futurama_PNG15.png)
+- The following local SVG icon in your markdown source will be embedded in the generated html
+  ![Painting](./applications-graphics-symbolic.svg)
 
 ## Some text with LaTeX-like formulae using KaTeX
 
@@ -94,3 +96,11 @@ que tuve y tendré.
 [Eb]May, a possi[D#]bility
 [D/F#]Fee, the price you pay to run
 ```
+
+<!-- ## This is a commented section that should not be rendered or added to the TOC
+
+Bla bla
+
+### This is a commented subsection that should not be rendered or added to the TOC
+
+Bla bla... -->

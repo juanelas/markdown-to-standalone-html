@@ -30,14 +30,14 @@ program.arguments('<inputfile>')
 program.option('-A, --disable-all', 'disable all plugins')
 
 program.option('-B, --disable-bootstrap', 'disable embedding the bootstrap CSS in the generated html file')
-program.option('-bj, --enable-bootstrap-js', 'enable embedding bootstrap JS files in the generated html file. It may be useful when using a custom theme')
+program.option('-b, --enable-bootstrap-js', 'enable embedding bootstrap JS files in the generated html file. It may be useful when using a custom theme')
 
 program.option('-C, --disable-chords', 'disable support for rendering lyrics with chords using chordsong')
 
-program.option('-CC, --disable-code-chords', 'disable support for rendering lyrics with chords using code-chords')
+program.option('--CC, --disable-code-chords', 'disable support for rendering lyrics with chords using code-chords')
 
-program.option('-H, --disable-highlightjs', 'disable syntax highlighting of fenced code blocks with highlight.js')
-program.option('-hs, --highlightjs-style <stylename>', 'set the highlight.js style. See https://github.com/highlightjs/highlight.js/tree/master/src/styles', 'vs2015')
+program.option('--Hl, --disable-highlightjs', 'disable syntax highlighting of fenced code blocks with highlight.js')
+program.option('--hl, --highlightjs-style <stylename>', 'set the highlight.js style. See https://github.com/highlightjs/highlight.js/tree/master/src/styles', 'vs2015')
 
 program.option('-K, --disable-katex', 'disable math support (prevents embedding the KaTeX CSS and fonts)')
 

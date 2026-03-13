@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it'
-import { RenderRule } from 'markdown-it/lib/renderer'
+import { type RenderRule } from 'markdown-it/lib/renderer.mjs'
 import chordsong, { SongParts } from 'chordsong'
 
 export default function chordsongPlugin (md: MarkdownIt, cssArr: string[]): void {
